@@ -30,14 +30,14 @@ public class ImageItemAdapter extends ArrayAdapter<ImageItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.image_item_result, parent, false);
         }
 
-        ImageView ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
+        ImageView ivImage = (ImageView) convertView.findViewById(R.id.ivImageItem);
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
 
         // clear out image
 //        ivImage.setImageResource(0);
         tvTitle.setText(imageItem.getTitle());
 
-        Picasso.with(getContext()).load(imageItem.getThumbUrl()).placeholder(R.mipmap.icon_activity_bar).into(ivImage);
+        Picasso.with(getContext()).load(imageItem.getThumbUrl()).into(ivImage);
         return convertView;
     }
 }

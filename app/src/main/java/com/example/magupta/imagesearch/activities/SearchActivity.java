@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
                 // Get image result into the intent
                 ImageItem imageItem = imageItems.get(position);
                 // Pass image result into  the intent
-                i.putExtra("url", imageItem.getUrl());
+                i.putExtra("item", imageItem);
                 // Launch Image display activity
                 startActivity(i);
             }

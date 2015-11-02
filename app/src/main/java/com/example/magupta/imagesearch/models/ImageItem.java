@@ -7,12 +7,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by magupta on 11/1/15.
  */
-public class ImageItem {
+public class ImageItem implements Serializable{
     /*
     width, height, tbUrl, title, url
     responseData => results => [x] => tbUrl

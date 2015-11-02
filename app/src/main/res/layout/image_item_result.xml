@@ -6,7 +6,7 @@
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:id="@+id/ivImageResult"
+        android:id="@+id/ivImageItem"
         android:scaleType="fitXY"
         android:contentDescription="Image Result" />
 

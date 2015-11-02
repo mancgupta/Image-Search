@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.example.magupta.imagesearch.R;
+import com.example.magupta.imagesearch.models.ImageItem;
 import com.squareup.picasso.Picasso;
 
 public class ImageDisplayActivity extends AppCompatActivity {
@@ -15,13 +16,12 @@ public class ImageDisplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_display);
-
         // PUll out url
-        String url = getIntent().getStringExtra("url");
+        ImageItem imageItem = (ImageItem)getIntent().getSerializableExtra("item");
         // Find Image View
         ImageView ivImageResult = (ImageView) findViewById(R.id.ivImageResult);
         // Load image url using picaso
-        Picasso.with(this).load(url).into(ivImageResult);
+        Picasso.with(this).load(imageItem.getUrl()).into(ivImageResult);
     }
 
     @Override
