@@ -112,9 +112,11 @@
         android:text="@string/save_button"
         android:id="@+id/btSaveSearch"
         android:layout_below="@+id/textView4"
+        android:textColor="#FFF"
         android:layout_toLeftOf="@+id/etSiteFilter"
         android:layout_toStartOf="@+id/etSiteFilter"
         android:onClick="saveSearchFilters"
+        android:background="#4763dd"
         android:layout_marginTop="56dp" />
 
     <Button
