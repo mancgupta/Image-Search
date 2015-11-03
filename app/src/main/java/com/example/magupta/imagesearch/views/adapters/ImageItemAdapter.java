@@ -37,7 +37,7 @@ public class ImageItemAdapter extends ArrayAdapter<ImageItem> {
 //        ivImage.setImageResource(0);
         tvTitle.setText(imageItem.getTitle());
 
-        Picasso.with(getContext()).load(imageItem.getThumbUrl()).into(ivImage);
+        Picasso.with(getContext()).load(imageItem.getThumbUrl()).placeholder(R.drawable.picture_background).into(ivImage);
         return convertView;
     }
 }

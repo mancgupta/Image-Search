@@ -21,7 +21,7 @@ public class ImageDisplayActivity extends AppCompatActivity {
         // Find Image View
         ImageView ivImageResult = (ImageView) findViewById(R.id.ivImageResult);
         // Load image url using picaso
-        Picasso.with(this).load(imageItem.getUrl()).into(ivImageResult);
+        Picasso.with(this).load(imageItem.getUrl()).placeholder(R.drawable.picture_background).into(ivImageResult);
     }
 
     @Override

@@ -11,7 +11,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.SearchActivity"
-            android:label="@string/custom_app_label" >
+            android:label="@string/custom_app_label"
+            android:logo="@mipmap/icon_activity_bar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,6 +22,14 @@
         <activity
             android:name=".activities.ImageDisplayActivity"
             android:label="@string/title_activity_image_display"
+            android:parentActivityName=".activities.SearchActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.magupta.imagesearch.activities.SearchActivity" />
+        </activity>
+        <activity
+            android:name=".activities.FilterActivity"
+            android:label="@string/title_activity_filter"
             android:parentActivityName=".activities.SearchActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

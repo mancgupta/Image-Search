@@ -4,8 +4,8 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:id="@+id/ivImageItem"
         android:scaleType="fitXY"
         android:contentDescription="Image Result" />

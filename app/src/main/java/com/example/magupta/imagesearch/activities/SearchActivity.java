@@ -14,8 +14,9 @@ import android.widget.Toast;
 
 import com.example.magupta.imagesearch.R;
 import com.example.magupta.imagesearch.models.ImageItem;
+import com.example.magupta.imagesearch.utilities.EndlessScrollListener;
+import com.example.magupta.imagesearch.utilities.GoogleClient;
 import com.example.magupta.imagesearch.views.adapters.ImageItemAdapter;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -30,14 +31,18 @@ public class SearchActivity extends AppCompatActivity {
     private EditText etQuery;
     private GridView gvResults;
     private ArrayList<ImageItem> imageItems;
-    private final String IMAGE_API_URL = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0";
-    private int resultCount = 8;
     private ImageItemAdapter imageItemAdapter;
+    private GoogleClient googleClient;
+    private final int REQUEST_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.icon_activity_bar);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         setContentView(R.layout.activity_search);
+        googleClient = new GoogleClient();
         setupViews();
         imageItems = new ArrayList<>();
 
@@ -55,6 +60,15 @@ public class SearchActivity extends AppCompatActivity {
     private void setupViews() {
         etQuery = (EditText) findViewById(R.id.etQuery);
         gvResults = (GridView) findViewById(R.id.gvResults);
+
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                googleClient.page = page;
+                fetchImages(false);
+                return true;
+            }
+        });
 
         gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,6 +104,14 @@ public class SearchActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.filter_result){
+            Intent i = new Intent(SearchActivity.this, FilterActivity.class);
+            i.putExtra("image_size", googleClient.imageSize);
+            i.putExtra("color", googleClient.color);
+            i.putExtra("type", googleClient.type);
+            i.putExtra("site", googleClient.site);
+            startActivityForResult(i, REQUEST_CODE);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -97,21 +119,20 @@ public class SearchActivity extends AppCompatActivity {
     public void onImageSearch(View view) {
         String query = etQuery.getText().toString();
         Toast.makeText(this, "Search for: " + query, Toast.LENGTH_SHORT).show();
-
-        fetchImages(query);
+        googleClient.query = query;
+        googleClient.page = 1;
+        fetchImages(true);
     }
 
-    public void fetchImages(String query){
-        AsyncHttpClient client = new AsyncHttpClient();
-        String searchUrl = IMAGE_API_URL + "&q=" + query + "&rsz=" + Integer.toString(resultCount);
-        Log.i("DEBUG", searchUrl);
-        client.get(searchUrl, new JsonHttpResponseHandler() {
+    public void fetchImages(final boolean clearList){
+        googleClient.fetchImages(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray imageResultsJson = null;
                 try {
                     imageResultsJson = response.getJSONObject("responseData").getJSONArray("results");
-                    imageItems.clear();
+                    if (clearList)
+                        imageItems.clear();
                     imageItems.addAll(ImageItem.fromJSONArray(imageResultsJson));
                     Log.i("DEBUG", imageItems.toString());
                 } catch (JSONException e) {
@@ -123,4 +144,15 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ( resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            googleClient.imageSize = data.getExtras().getString("image_size");
+            googleClient.color = data.getExtras().getString("color");
+            googleClient.type = data.getExtras().getString("type");
+            googleClient.site = data.getExtras().getString("site");
+            fetchImages(true);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
